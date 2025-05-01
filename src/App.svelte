@@ -6,9 +6,11 @@
     import { download } from './download2';
 
     import A5Book20PgSignatures  from './presets/A5Booklet20PgSections.json';
+    import A4_4xA6_Cards  from './presets/A4 4x A6 Cards.json';
 
   const presets: PresetPattern[] = [
-    A5Book20PgSignatures
+    A5Book20PgSignatures,
+    A4_4xA6_Cards
   ]
 
   let pages: Page[] = $state([]);
@@ -191,6 +193,9 @@
     download(JSON.stringify(pattern), "my pattern.json", "text/json")
   }
 
+  const import_pattern = () => {
+  }
+
 
 </script>
 
@@ -213,7 +218,7 @@
 
       {#each presets as preset}
         <button onclick={() => {
-                pages = [...A5Book20PgSignatures.pages]; 
+                pages = [...preset.pages]; 
                 source_height=preset.source_height ?? source_height;
                 source_width=preset.source_width ?? source_width;
                 }}>{preset.name}</button>
