@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Book Arranger</title>
+		<link rel="stylesheet" href="main.css">
+
+		<script>
+			class PatternPage extends HTMLElement {
+				constructor() {
+					super();
+				}
+			}
+
+			customElements.define("pattern-page", PatternPage);
+
+		</script>
+
+	</head>
+	<body>
+
+		<header></header>
+		<main>
+			<section id="source-page-controls">
+				<label for="source-page-width">Source Page Width</label>
+				<input id="source-page-width" type="number" onChange="">
+				<label for="source-page-height">Source Page Height</label>
+					<input id="source-page-height" type="number" value="">
+					<button onclick="">Height</button>
+			</section>
+
+			<section id="new-page-controls">
+				<button onClick="">New Page</button>
+			</section>
+
+			<section id="arrangement-pattern-preview">
+				<pattern-page>Huh?</pattern-page>
+			</section>
+
+			<article>
+				<p>Hello</p>
+				<p is="word-count"></p>
+			</article>
+		</main>
+
+
+	</body>
+</html>
