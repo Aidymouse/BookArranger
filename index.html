@@ -6,41 +6,74 @@
 		<link rel="stylesheet" href="main.css">
 
 		<script>
+
 			class PatternPage extends HTMLElement {
 				constructor() {
 					super();
+
+					const shadow = this.attachShadow({mode: 'open'});
+					const template = document.querySelector("#preview-page").content;
+					//shadow.appendChild(template.cloneNode(true));
+
+					//const addPageButton = document.createElement("button")
+					//addPageButton.textContent = "Add Page";
+					//addPageButton.addEventListener(() => this.addPage();)
+					//shadow.appendChild(addPageButton);
+
+					//this.pages = [];
+
+					//console.log(this.shadowRoot.querySelector("#prev"));
+					this.render();
+				}
+
+				e() {
+					console.log("Egg");
+				}
+
+				/// I can put my own methods on here..... curious....
+				addPage() {
+					//this.pages.push({});
+					console.log("Add Page");
+					const e = document.createElement("p");
+					e.textContent = "P";
+
+					this.shadowRoot.appendChild(e);
+				}
+
+				render() {
+					this.addPage();
+					this.shadowRoot.innerHTML = `
+						<div>
+						<p>Page</p>
+						<button onClick="this.getRootNode().host.addPage()">Add Placement</button>
+						</div>
+					`;
 				}
 			}
 
 			customElements.define("pattern-page", PatternPage);
 
+
+			const addPage = () => {
+				document.querySelector("#preview-pages").appendChild(new PatternPage())
+			}
 		</script>
 
 	</head>
 	<body>
 
+		<template id="preview-page">
+		</template>
+
 		<header></header>
 		<main>
-			<section id="source-page-controls">
-				<label for="source-page-width">Source Page Width</label>
-				<input id="source-page-width" type="number" onChange="">
-				<label for="source-page-height">Source Page Height</label>
-					<input id="source-page-height" type="number" value="">
-					<button onclick="">Height</button>
+			
+			<button onclick="addPage()">Add Page</button>
+
+			<section id="preview-pages">
 			</section>
 
-			<section id="new-page-controls">
-				<button onClick="">New Page</button>
-			</section>
 
-			<section id="arrangement-pattern-preview">
-				<pattern-page>Huh?</pattern-page>
-			</section>
-
-			<article>
-				<p>Hello</p>
-				<p is="word-count"></p>
-			</article>
 		</main>
 
 
