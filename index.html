@@ -7,6 +7,9 @@
 
 		<script>
 
+			const pageWidth = 400;
+			const pageHeight = 300;
+
 			class PatternPage extends HTMLElement {
 				constructor() {
 					super();
@@ -31,22 +34,29 @@
 				}
 
 				/// I can put my own methods on here..... curious....
-				addPage() {
+				addPlacement() {
 					//this.pages.push({});
-					console.log("Add Page");
 					const e = document.createElement("p");
 					e.textContent = "P";
 
-					this.shadowRoot.appendChild(e);
+
+					const elem = this.shadowRoot.querySelector(".preview-page")
+					console.log(elem);
+					elem.appendChild(e);
+				}
+
+				removeThisPage() {
+					this.remove();
 				}
 
 				render() {
-					this.addPage();
 					this.shadowRoot.innerHTML = `
-						<div>
+						<link rel="stylesheet" href="main.css">
+						<div class="preview-page" style="width: ${pageWidth}px; height: ${pageHeight}px">
 						<p>Page</p>
-						<button onClick="this.getRootNode().host.addPage()">Add Placement</button>
 						</div>
+						<button onClick="this.getRootNode().host.addPlacement()">Add Placement</button>
+						<button onClick="this.getRootNode().host.removeThisPage()">Remove!</button>
 					`;
 				}
 			}
@@ -55,7 +65,10 @@
 
 
 			const addPage = () => {
-				document.querySelector("#preview-pages").appendChild(new PatternPage())
+
+				const pattern_page = document.createElement("pattern-page");
+
+				document.querySelector("#pattern-preview").appendChild(pattern_page);
 			}
 		</script>
 
@@ -70,7 +83,7 @@
 			
 			<button onclick="addPage()">Add Page</button>
 
-			<section id="preview-pages">
+			<section id="pattern-preview">
 			</section>
 
 
