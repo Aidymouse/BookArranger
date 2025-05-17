@@ -5,19 +5,13 @@
 		<title>Book Arranger</title>
 		<link rel="stylesheet" href="main.css">
 
-		<script type="module" src="PatternPage.js"></script>
 		<script type="module">
 
-			import { Placement } from './Placement.js'
-			import { PatternPage } from './PatternPage.js'
-
-			const pageWidth = 400;
-			const pageHeight = 300;
-
+			import { Placement } from './js/Placement.js'
+			import { PatternPage } from './js/PatternPage.js'
 
 			customElements.define("pattern-page", PatternPage);
 			customElements.define("arranger-placement", Placement);
-
 
 			const getAllPlacements = () => {
 				
@@ -43,6 +37,9 @@
 			/** Button Methods */
 			window.addPage = () => {
 
+				const pageWidth = document.querySelector("#new-page-width").value;
+				const pageHeight = document.querySelector("#new-page-height").value;
+
 				const pattern_page = document.createElement("pattern-page");
 				pattern_page.setAttribute('width', pageWidth);
 				pattern_page.setAttribute('height', pageHeight);
@@ -64,6 +61,14 @@
 					placement.querySelector(".placement").style.width = `${newWidth}px`
 				}
 			}
+
+			window.updatePlacementHeights = (newHeight) => {
+				const placements = getAllPlacements();
+
+				for (const placement of placements) {
+					placement.querySelector(".placement").style.height = `${newHeight}px`
+				}
+			}
 		</script>
 
 	</head>
@@ -77,6 +82,8 @@
 			
 			<!-- Page Controls -->
 			<section>
+				<label for="new-page-width">New Page Width</label> <input type="number" value="400" id="new-page-width">
+				<label for="new-page-height">New Page Height</label> <input type="number" value="400" id="new-page-height">
 				<button onclick="addPage()">Add Page</button>
 			</section>
 
@@ -86,8 +93,10 @@
 				<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
 
 				<label for="source-page-height">Source Page Height</label>
-				<input type="number" value="400" id="source-page-height">
+				<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
 			</section>
+
+			
 			
 
 			<!-- Where new pages get added -->
