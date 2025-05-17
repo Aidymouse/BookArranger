@@ -31,11 +31,15 @@ body {
 .preview-page {
 
 	color: black;
-	/* background-color: #f2f2f2; */
+	background-color: #f2f2f2;
 	border: solid 1px black;
 	overflow: hidden;
 
 }
 
-.preview-page .placement {
+/* Placements */
+.placement {
+	border: solid 1px black;
+	background-color: white;
 }
+
