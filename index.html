@@ -19,22 +19,6 @@
 			customElements.define("arranger-placement", Placement);
 
 
-			/** Button Methods */
-			window.addPage = () => {
-
-				const pattern_page = document.createElement("pattern-page");
-				pattern_page.setAttribute('width', pageWidth);
-				pattern_page.setAttribute('height', pageHeight);
-
-				document.querySelector("#pattern-preview").appendChild(pattern_page);
-			}
-
-			window.sourcePageWidthChanged = (newWidth) => {
-			}
-
-			window.sourcePageHeightChanged = (newHeight) => {
-			}
-
 			const getAllPlacements = () => {
 				
 				let allPlacements = [];
@@ -56,6 +40,23 @@
 				
 			}
 
+			/** Button Methods */
+			window.addPage = () => {
+
+				const pattern_page = document.createElement("pattern-page");
+				pattern_page.setAttribute('width', pageWidth);
+				pattern_page.setAttribute('height', pageHeight);
+
+				document.querySelector("#pattern-preview").appendChild(pattern_page);
+			}
+
+			window.sourcePageWidthChanged = (newWidth) => {
+			}
+
+			window.sourcePageHeightChanged = (newHeight) => {
+			}
+
+
 			window.updatePlacementWidths = (newWidth) => {
 				const placements = getAllPlacements();
 
@@ -75,16 +76,19 @@
 		<main>
 			
 			<!-- Page Controls -->
-			<button onclick="addPage()">Add Page</button>
+			<section>
+				<button onclick="addPage()">Add Page</button>
+			</section>
 
 			<!-- Source Controls -->
-			<label for="source-page-width">Source Page Width</label>
-			<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
+			<section>
+				<label for="source-page-width">Source Page Width</label>
+				<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
 
-			<label for="source-page-height">Source Page Height</label>
-			<input type="number" value="400" id="source-page-height">
+				<label for="source-page-height">Source Page Height</label>
+				<input type="number" value="400" id="source-page-height">
+			</section>
 			
-			<button onClick="getAllPlacements()">Get all placements</button>
 
 			<!-- Where new pages get added -->
 			<section id="pattern-preview">
