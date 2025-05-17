@@ -6,21 +6,10 @@ export class PatternPage extends HTMLElement {
 
         const shadow = this.attachShadow({ mode: 'open' })
         const template = document.querySelector('#preview-page').content
-        //shadow.appendChild(template.cloneNode(true));
-
-        //const addPageButton = document.createElement("button")
-        //addPageButton.textContent = "Add Page";
-        //addPageButton.addEventListener(() => this.addPage();)
-        //shadow.appendChild(addPageButton);
 
         // Defaults
         this.pageWidth = 100
         this.pageHeight = 100
-
-        //this.pages = [];
-
-        //console.log(this.shadowRoot.querySelector("#prev"));
-        // this.render();
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -40,17 +29,8 @@ export class PatternPage extends HTMLElement {
 
     /// I can put my own methods on here..... curious....
     addPlacement() {
-        //this.pages.push({});
         const e = document.createElement('arranger-placement')
-        //e.textContent = "P";
-
-        //this.shadowRoot.createElement("arranger-placement");
-
-        //document.createElement("arranasdger-placement");
-
-        const elem = this.shadowRoot.querySelector('.preview-page')
-        //console.log(elem);
-        elem.appendChild(e)
+        this.shadowRoot.querySelector('.preview-page').appendChild(e)
     }
 
     removeThisPage() {
