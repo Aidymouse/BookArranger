@@ -29,7 +29,16 @@ export class PatternPage extends HTMLElement {
 
     /// I can put my own methods on here..... curious....
     addPlacement() {
+        //this.shadowRoot.
         const e = document.createElement('arranger-placement')
+        e.setAttribute(
+            'width',
+            document.querySelector('#source-page-width').value
+        )
+        e.setAttribute(
+            'height',
+            document.querySelector('#source-page-height').value
+        )
         this.shadowRoot.querySelector('.preview-page').appendChild(e)
     }
 

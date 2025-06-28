@@ -23,7 +23,7 @@
 					const placements = page.shadowRoot.querySelector(".preview-page").children
 
 					for (const placement of placements) {
-						allPlacements.push(placement.shadowRoot);
+						allPlacements.push(placement);
 						//placement.shadowRoot.querySelector(".placement").style.width = "100px";
 						//console.log(placement.shadowRoot.querySelector(".placement"));
 					}
@@ -58,7 +58,7 @@
 				const placements = getAllPlacements();
 
 				for (const placement of placements) {
-					placement.querySelector(".placement").style.width = `${newWidth}px`
+					placement.setAttribute('width', newWidth);
 				}
 			}
 
@@ -66,7 +66,7 @@
 				const placements = getAllPlacements();
 
 				for (const placement of placements) {
-					placement.querySelector(".placement").style.height = `${newHeight}px`
+					placement.setAttribute('width', newHeight);
 				}
 			}
 		</script>
