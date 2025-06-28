@@ -12,6 +12,12 @@
 			import { PatternPage } from './js/PatternPage.js'
 
 			import { measurements, convert } from './js/measurements.js'
+			import { rearrange_pdf } from './js/processPdf.js'
+
+			import { PDFDocument } from "./lib/pdf-lib.esm.min.js"
+
+
+			//import { PDFDocument } from 'pdf-lib';
 
 			// Set default page to landscape a4
 			document.querySelector("#new-page-width").value = measurements.a4.height
@@ -119,8 +125,41 @@ pattern_page.setAttribute('width', pageWidth);
 				console.log(arrangement_pattern);
 			}
 
+
+			let loaded_doc = null;
+
+			window.newFile = (event) => {
+			     const reader = new FileReader();
+
+			     reader.onloadend = (load_res) => {
+			    		
+					console.log(load_res);
+			    
+			       if (!reader.result) return;
+
+
+			    
+			       PDFDocument.load(reader.result).then(pdf_res => {
+				 loaded_doc = pdf_res;
+				 console.log("Loaded");
+			       });
+			    
+			    
+			     }
+
+			     console.log(event.target.files)
+			     reader.readAsDataURL(event.target.files[0]);
+			    
+			}
+
 			window.generate = () => {
+				if (loaded_doc === null) {
+					console.log("No loaded doc!");
+					return;
+				}
 				const pattern = extract_arrangement_pattern();
+
+				rearrange_pdf(loaded_doc, pattern);
 			}
 
 		</script>
@@ -152,6 +191,7 @@ pattern_page.setAttribute('width', pageWidth);
 
 			<!-- Generator Controls -->
 			<section>
+				<input type="file" onChange="newFile(event)">
 				<button onClick="generate()">Generate</button>
 			</section>
 
