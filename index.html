@@ -4,11 +4,22 @@
 	<head>
 		<title>Book Arranger</title>
 		<link rel="stylesheet" href="main.css">
+		
 
 		<script type="module">
 
 			import { Placement } from './js/Placement.js'
 			import { PatternPage } from './js/PatternPage.js'
+
+			import { measurements, convert } from './js/measurements.js'
+
+			// Set default page to landscape a4
+			document.querySelector("#new-page-width").value = measurements.a4.height
+			document.querySelector("#new-page-height").value = measurements.a4.width
+
+			// Set default source page to portrait a5
+			document.querySelector("#source-page-width").value = measurements.a5.width
+			document.querySelector("#source-page-height").value = measurements.a5.height
 
 			customElements.define("pattern-page", PatternPage);
 			customElements.define("arranger-placement", Placement);
@@ -82,8 +93,8 @@
 			
 			<!-- Page Controls -->
 			<section>
-				<label for="new-page-width">New Page Width</label> <input type="number" value="400" id="new-page-width">
-				<label for="new-page-height">New Page Height</label> <input type="number" value="400" id="new-page-height">
+				<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width">
+				<label for="new-page-height">New Page Height</label> <input type="number" value="" id="new-page-height">
 				<button onclick="addPage()">Add Page</button>
 			</section>
 
