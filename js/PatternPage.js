@@ -39,7 +39,13 @@ export class PatternPage extends HTMLElement {
             'height',
             document.querySelector('#source-page-height').value
         )
+
+        e.style.position = 'absolute'
+
         this.shadowRoot.querySelector('.preview-page').appendChild(e)
+
+        e.setAttribute('data-x', 0)
+        e.setAttribute('data-y', 0)
     }
 
     removeThisPage() {

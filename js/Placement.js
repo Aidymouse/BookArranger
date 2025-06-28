@@ -10,14 +10,8 @@ export class Placement extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' })
     }
 
-    // setAttribute(attrName, attrValue) {
-    //     console.log('Setting attr')
-    //     super.setAttribute(attrName, attrValue)
-    //     this.attributeChangedCallback(attrName, null, attrValue)
-    // }
-
     attributeChangedCallback(attr, oldValue, newValue) {
-        console.log('Placement Attr Changed', attr, oldValue, newValue)
+        //console.log('Placement Attr Changed', attr, oldValue, newValue)
 
         switch (attr) {
             case 'width':
@@ -30,6 +24,17 @@ export class Placement extends HTMLElement {
 
                 break
             }
+
+            case 'data-x': {
+                this.style.left = `${newValue}px`
+                this.shadowRoot.querySelector('#x').value = newValue
+                break
+            }
+            case 'data-y': {
+                this.style.top = `${newValue}px`
+                this.shadowRoot.querySelector('#y').value = newValue
+                break
+            }
         }
     }
 
@@ -37,16 +42,18 @@ export class Placement extends HTMLElement {
         const w = this.getAttribute('width')
         const h = this.getAttribute('height')
 
-        const x = 0
-        const y = 0
+        const x = this.getAttribute('data-x') ?? 0
+        const y = this.getAttribute('data-y') ?? 0
         this.shadowRoot.innerHTML = `
 			<link rel="stylesheet" href="css/placement.css">
 
 			<div class="placement" style="width: ${w}px; height: ${h}px;">
 
 				<section>
-					<input type="number" value="${x}" id="x" onChange="this.getRootNode().host.setAttribute('width', event.target.value)">
-					<input type="number" id="${y}" onChange="this.getRootNode().host.setAttribute('height', event.target.value)">
+					<label for="x">X</label>
+					<input type="number" value="${x}" id="x" onChange="this.getRootNode().host.setAttribute('data-x', event.target.value)">
+					<label for="y">Y</label>
+					<input type="number" value="${y}" id="y" onChange="this.getRootNode().host.setAttribute('data-y', event.target.value)">
 				</section>
 
 				<section>
@@ -54,7 +61,7 @@ export class Placement extends HTMLElement {
 				</section>
 
 				<section>
-					<button onClick="this.getRootNode().host.remove()">R</button>
+					<button onClick="this.getRootNode().host.remove()">Remove Placement</button>
 				</section>
 			</div>
 		`
@@ -62,9 +69,5 @@ export class Placement extends HTMLElement {
 
     connectedCallback() {
         this.render()
-
-        // const placement = this.shadowRoot.querySelector('.placement')
-        // placement.style.width = `${document.querySelector('#source-page-width').value}px`
-        // placement.style.height = `${document.querySelector('#source-page-height').value}px`
     }
 }
