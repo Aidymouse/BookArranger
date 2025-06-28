@@ -112,6 +112,7 @@ pattern_page.setAttribute('width', pageWidth);
 						new_page.tiles.push({
 							start: start,
 							skip: skip,
+							iteration: 0,
 							position: {
 								x: parseInt(placement.getAttribute('data-x')),
 								y: parseInt(placement.getAttribute('data-y'))
@@ -122,7 +123,7 @@ pattern_page.setAttribute('width', pageWidth);
 					arrangement_pattern.pages.push(new_page)
 				}
 
-				console.log(arrangement_pattern);
+				return arrangement_pattern;
 			}
 
 
@@ -158,6 +159,8 @@ pattern_page.setAttribute('width', pageWidth);
 					return;
 				}
 				const pattern = extract_arrangement_pattern();
+
+				console.log(pattern);
 
 				rearrange_pdf(loaded_doc, pattern);
 			}

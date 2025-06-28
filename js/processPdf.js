@@ -1,7 +1,7 @@
 import { download } from '../lib/download2.js'
 import { PDFDocument } from '../lib/pdf-lib.esm.min.js'
 
-const debug = false
+const debug = true
 
 export const rearrange_pdf = async (source, arrangement_pattern) => {
     const result = await PDFDocument.create()
