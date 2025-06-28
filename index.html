@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Book Arranger</title>
+		<link rel="stylesheet" href="main.css">
+		
+
+		<script type="module">
+
+			import { Placement } from './js/Placement.js'
+			import { PatternPage } from './js/PatternPage.js'
+
+			import { measurements, convert } from './js/measurements.js'
+			import { rearrange_pdf } from './js/processPdf.js'
+
+			import { PDFDocument } from "./lib/pdf-lib.esm.min.js"
+
+
+			//import { PDFDocument } from 'pdf-lib';
+
+			// Set default page to landscape a4
+			document.querySelector("#new-page-width").value = measurements.a4.height
+			document.querySelector("#new-page-height").value = measurements.a4.width
+
+			// Set default source page to portrait a5
+			document.querySelector("#source-page-width").value = measurements.a5.width
+			document.querySelector("#source-page-height").value = measurements.a5.height
+
+			customElements.define("pattern-page", PatternPage);
+			customElements.define("arranger-placement", Placement);
+
+			const getAllPlacements = () => {
+				
+				let allPlacements = [];
+
+				const e = document.querySelector("#pattern-preview")
+
+				for (const page of e.children) {
+					const placements = page.shadowRoot.querySelector(".preview-page").children
+
+					for (const placement of placements) {
+						allPlacements.push(placement);
+						//placement.shadowRoot.querySelector(".placement").style.width = "100px";
+						//console.log(placement.shadowRoot.querySelector(".placement"));
+					}
+					
+				}
+
+				return allPlacements;
+				
+			}
+
+			/** Button Methods */
+			window.addPage = () => {
+
+				const pageWidth = document.querySelector("#new-page-width").value;
+				const pageHeight = document.querySelector("#new-page-height").value;
+
+				const pattern_page = document.createElement("pattern-page");
+pattern_page.setAttribute('width', pageWidth);
+				pattern_page.setAttribute('height', pageHeight);
+
+				document.querySelector("#pattern-preview").appendChild(pattern_page);
+			}
+
+			window.sourcePageWidthChanged = (newWidth) => {
+			}
+
+			window.sourcePageHeightChanged = (newHeight) => {
+			}
+
+
+			window.updatePlacementWidths = (newWidth) => {
+				const placements = getAllPlacements();
+
+				for (const placement of placements) {
+					placement.setAttribute('width', newWidth);
+				}
+			}
+
+			window.updatePlacementHeights = (newHeight) => {
+				const placements = getAllPlacements();
+
+				for (const placement of placements) {
+					placement.setAttribute('height', newHeight);
+				}
+			}
+
+
+			/** Generate */
+			const extract_arrangement_pattern = () => {
+				let arrangement_pattern = {
+					pages: []
+				}
+
+				const patternPages = document.querySelectorAll("pattern-page");
+
+
+				for (const page of patternPages) {
+					const new_page = {
+					tiles: [],
+					width: parseInt(page.getAttribute('width')),
+					height: parseInt(page.getAttribute('height')),
+					}
+
+					const placements = page.shadowRoot.querySelectorAll("arranger-placement")
+
+					for (const placement of placements) {
+						const start = parseInt(placement.shadowRoot.querySelector("#placement-source-start").value)
+						const skip = parseInt(placement.shadowRoot.querySelector("#placement-source-skip").value)
+						new_page.tiles.push({
+							start: start,
+							skip: skip,
+							iteration: 0,
+							position: {
+								x: parseInt(placement.getAttribute('data-x')),
+								y: parseInt(placement.getAttribute('data-y'))
+							}
+						})
+					}
+
+					arrangement_pattern.pages.push(new_page)
+				}
+
+				return arrangement_pattern;
+			}
+
+
+			let loaded_doc = null;
+
+			window.newFile = (event) => {
+			     const reader = new FileReader();
+
+			     reader.onloadend = (load_res) => {
+			    		
+					console.log(load_res);
+			    
+			       if (!reader.result) return;
+
+
+			    
+			       PDFDocument.load(reader.result).then(pdf_res => {
+				 loaded_doc = pdf_res;
+				 console.log("Loaded");
+			       });
+			    
+			    
+			     }
+
+			     console.log(event.target.files)
+			     reader.readAsDataURL(event.target.files[0]);
+			    
+			}
+
+			window.generate = () => {
+				if (loaded_doc === null) {
+					console.log("No loaded doc!");
+					return;
+				}
+				const pattern = extract_arrangement_pattern();
+
+				console.log(pattern);
+
+				rearrange_pdf(loaded_doc, pattern);
+			}
+
+		</script>
+
+	</head>
+	<body>
+
+		<template id="preview-page">
+		</template>
+
+		<header></header>
+		<main>
+			
+			<!-- Page Controls -->
+			<section>
+				<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width">
+				<label for="new-page-height">New Page Height</label> <input type="number" value="" id="new-page-height">
+				<button onclick="addPage()">Add Page</button>
+			</section>
+
+			<!-- Source Controls -->
+			<section>
+				<label for="source-page-width">Source Page Width</label>
+				<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
+
+				<label for="source-page-height">Source Page Height</label>
+				<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
+			</section>
+
+			<!-- Generator Controls -->
+			<section>
+				<input type="file" onChange="newFile(event)">
+				<button onClick="generate()">Generate</button>
+			</section>
+
+			
+			
+
+			<!-- Where new pages get added -->
+			<section id="pattern-preview">
+			</section>
+
+
+		</main>
+
+
+	</body>
+</html>
