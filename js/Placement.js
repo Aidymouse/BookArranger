@@ -57,6 +57,11 @@ export class Placement extends HTMLElement {
 				</section>
 
 				<section>
+					<input id="placement-source-start" type="number" value="1">
+					<input id="placement-source-skip" type="number" value="1">
+				</section>
+
+				<section>
 					<p>Grab Handle</p>
 				</section>
 

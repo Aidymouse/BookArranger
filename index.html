@@ -52,7 +52,7 @@
 				const pageHeight = document.querySelector("#new-page-height").value;
 
 				const pattern_page = document.createElement("pattern-page");
-				pattern_page.setAttribute('width', pageWidth);
+pattern_page.setAttribute('width', pageWidth);
 				pattern_page.setAttribute('height', pageHeight);
 
 				document.querySelector("#pattern-preview").appendChild(pattern_page);
@@ -80,6 +80,49 @@
 					placement.setAttribute('height', newHeight);
 				}
 			}
+
+
+			/** Generate */
+			const extract_arrangement_pattern = () => {
+				let arrangement_pattern = {
+					pages: []
+				}
+
+				const patternPages = document.querySelectorAll("pattern-page");
+
+
+				for (const page of patternPages) {
+					const new_page = {
+					tiles: [],
+					width: parseInt(page.getAttribute('width')),
+					height: parseInt(page.getAttribute('height')),
+					}
+
+					const placements = page.shadowRoot.querySelectorAll("arranger-placement")
+
+					for (const placement of placements) {
+						const start = parseInt(placement.shadowRoot.querySelector("#placement-source-start").value)
+						const skip = parseInt(placement.shadowRoot.querySelector("#placement-source-skip").value)
+						new_page.tiles.push({
+							start: start,
+							skip: skip,
+							position: {
+								x: parseInt(placement.getAttribute('data-x')),
+								y: parseInt(placement.getAttribute('data-y'))
+							}
+						})
+					}
+
+					arrangement_pattern.pages.push(new_page)
+				}
+
+				console.log(arrangement_pattern);
+			}
+
+			window.generate = () => {
+				const pattern = extract_arrangement_pattern();
+			}
+
 		</script>
 
 	</head>
@@ -105,6 +148,11 @@
 
 				<label for="source-page-height">Source Page Height</label>
 				<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
+			</section>
+
+			<!-- Generator Controls -->
+			<section>
+				<button onClick="generate()">Generate</button>
 			</section>
 
 			
