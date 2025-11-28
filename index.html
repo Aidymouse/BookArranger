@@ -187,77 +187,80 @@
 		</template>
 
 		<nav>
-			<!-- Pattern Controls -->
-			<section style="padding: var(--gap); border-bottom: solid 1px var(--bg-lightest);"> 
-				<button onClick="save_pattern()">Save Pattern</button>
-				<button disabled>Load Pattern</button>
+			<div style="flex-grow: 1">
+				<!-- Pattern Controls -->
+				<section class="padded-section"> 
+					<button onClick="save_pattern()">Save Pattern</button>
+					<button disabled>Load Pattern</button>
+				</section>
+
+				<!-- Page Controls -->
+				<details open>
+					<summary><strong>Page</strong></summary>
+
+					<div class="two-col-settings">
+						<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width" />
+						<label for="new-page-height">New Page Height</label> <input type="number" value="" id="new-page-height" />
+
+						<div style="grid-column: span 2;">
+							<button disabled>A4</button>
+							<button disabled>Letter</button>
+						</div>
+
+						<div style="grid-column: span 2;">
+							<button style="width: 100%" onclick="addPage()">Add Page</button>
+						</div>
+
+
+					</div>
+
+				</details>
+
+				<!-- Source Controls -->
+				<details open>
+					<summary><strong>Source PDF Settings</strong></summary>
+
+					<div class="two-col-settings">
+						<label for="source-page-width">Source Page Width</label>
+						<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
+
+						<label for="source-page-height">Source Page Height</label>
+						<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
+
+						<div style="grid-column: span 2;">
+							<button onClick="setPlacementSize('a5')">A5</button>
+							<button disabled>Letter</button>
+						</div>
+					</div>
+
+				</details>
+
+				<!-- Booklet Generator -->
+				<details>
+					<summary><strong>Booklet Generator</strong></summary>
+
+					<div class="two-col-settings">
+						<label for="bg-pages-per-section">Source Page Width</label>
+						<input type="number" value="20" id="bg-pages-per-section" >
+
+						<div style="grid-column: span 2;">
+							<button style="width: 100%">Generate Booklet</button>
+						</div>
+
+					</div>
+				</details>
+			</div>
+
+			<!-- PDF Source & Generate Controls  -->
+			<section class="padded-section" style=": flex-end;"> 
+				<input type="file" onChange="newFile(event)">
+				<button style="width: 100%; margin-top: var(--gap-small)"  onClick="generate()">Generate</button>
 			</section>
-
-			<!-- Page Controls -->
-			<details open>
-				<summary><strong>Page</strong></summary>
-
-				<div class="two-col-settings">
-					<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width" />
-					<label for="new-page-height">New Page Height</label> <input type="number" value="" id="new-page-height" />
-
-					<div style="grid-column: span 2;">
-						<button disabled>A4</button>
-						<button disabled>Letter</button>
-					</div>
-
-					<div style="grid-column: span 2;">
-						<button style="width: 100%" onclick="addPage()">Add Page</button>
-					</div>
-
-
-				</div>
-
-			</details>
-
-			<!-- Source Controls -->
-			<details open>
-				<summary><strong>Source PDF Settings</strong></summary>
-
-				<div class="two-col-settings">
-					<label for="source-page-width">Source Page Width</label>
-					<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
-
-					<label for="source-page-height">Source Page Height</label>
-					<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
-
-					<div style="grid-column: span 2;">
-						<button onClick="setPlacementSize('a5')">A5</button>
-						<button disabled>Letter</button>
-					</div>
-				</div>
-
-			</details>
-
-			<!-- Booklet Generator -->
-			<details>
-				<summary><strong>Booklet Generator</strong></summary>
-
-				<div class="two-col-settings">
-					<label for="bg-pages-per-section">Source Page Width</label>
-					<input type="number" value="400" id="bg-pages-per-section" >
-
-					<div style="grid-column: span 2;">
-						<button style="width: 100%">Generate Booklet</button>
-					</div>
-
-				</div>
-			</details>
 		</nav>
 
 		<main>
 			
 
-			<!-- Generator Controls -->
-			<section>
-				<input type="file" onChange="newFile(event)">
-				<button onClick="generate()">Generate</button>
-			</section>
 
 			<!-- Where new pages get added -->
 			<section id="pattern-preview">

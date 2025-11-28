@@ -33,6 +33,10 @@ body {
 
 body nav {
 	background-color: var(--bg-light);
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: scroll;
 }
 
 nav details {
@@ -56,9 +60,16 @@ nav details[open] summary {
 	width: 100%;
 }
 
+nav .padded-section {
+	padding: var(--gap);
+	border-bottom: solid 1px var(--bg-lightest);
+}
+
 
 main {
 	padding: var(--gap);	
+	height: 100%;
+	overflow: scroll;
 }
 
 #pattern-preview {
