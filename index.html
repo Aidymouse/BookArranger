@@ -8,8 +8,8 @@
 
 		<script type="module">
 
-			import { Placement } from './js/Placement.js'
-			import { PatternPage } from './js/PatternPage.js'
+			import { Placement } from './components/Placement.js'
+			import { PatternPage } from './components/PatternPage.js'
 
 			import { measurements, convert } from './js/measurements.js'
 			import { rearrange_pdf } from './js/processPdf.js'
@@ -188,7 +188,7 @@
 
 		<nav>
 			<!-- Pattern Controls -->
-			<section style="padding: var(--gap); border-bottom: solid 1px black;"> 
+			<section style="padding: var(--gap); border-bottom: solid 1px var(--bg-lightest);"> 
 				<button onClick="save_pattern()">Save Pattern</button>
 				<button disabled>Load Pattern</button>
 			</section>

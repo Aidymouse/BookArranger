@@ -47,6 +47,27 @@ export class Placement extends HTMLElement {
 		//this.parentNode.getRootNode().host.grabbedElem = this
 	}
 
+	generatePagesString(start, skip) {
+		return `Page ${start}, ${start+1+skip}, ${start+2+skip*2}, ${start+3+skip*3}...`
+	}
+
+	updateStart(start) {
+		const skip = this.shadowRoot.querySelector('#placement-source-skip').valueAsNumber
+
+		if (isNaN(start) || isNaN(skip)) { return; }
+
+		this.shadowRoot.querySelector('#placement-pages').innerHTML = this.generatePagesString(start, skip);
+	}
+
+	updateSkip(skip) {
+		const start = this.shadowRoot.querySelector('#placement-source-start').valueAsNumber
+
+		if (isNaN(start) || isNaN(skip)) { return; }
+
+		this.shadowRoot.querySelector('#placement-pages').innerHTML = this.generatePagesString(start, skip);
+
+	}
+
     render() {
         const w = this.getAttribute('width')
         const h = this.getAttribute('height')
@@ -58,29 +79,27 @@ export class Placement extends HTMLElement {
 
 			<div class="placement" style="width: ${w}px; height: ${h}px;">
 
-				<section>
+				<label for="placement-source-start">Start</label>
+				<input id="placement-source-start" type="number" value="1" onChange="this.getRootNode().host.updateStart(event.target.valueAsNumber)">
+				<label for="placement-source-skip">Skip</label>
+				<input id="placement-source-skip" type="number" value="0" onChange="this.getRootNode().host.updateSkip(event.target.valueAsNumber)">
+
+				<p id="placement-pages">Page 1, 2, 3, 4...</p>
+
+				<button id="remove-placement-btn" onClick="this.getRootNode().host.remove()">Remove Placement</button>
+
+				<div id="pos-controls">
 					<label for="x">X</label>
 					<input type="number" value="${x}" id="x" onChange="this.getRootNode().host.setAttribute('data-x', event.target.value)">
 					<label for="y">Y</label>
 					<input type="number" value="${y}" id="y" onChange="this.getRootNode().host.setAttribute('data-y', event.target.value)">
-				</section>
+				</div>
 
-				<section>
-					<label for="placement-source-start">Start</label>
-					<input id="placement-source-start" type="number" value="1">
-					<label for="placement-source-skip">Skip</label>
-					<input id="placement-source-skip" type="number" value="0">
-				</section>
-
-				<section>
-					<button onClick="this.getRootNode().host.remove()">Remove Placement</button>
-				</section>
-
-				<section style="width: 5em; height: 5em; background-color: blue;"
+				<section
 					class="grab-handle"
 					onMousedown="this.getRootNode().host.handleMouseDown(event)"
 				>
-					<p>Grab Handle</p>
+					<img src="./assets/placement_handle.png">
 				</section>
 			</div>
 		`

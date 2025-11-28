@@ -1,5 +1,59 @@
 .placement {
-	border: solid 1px black;
-	background-color: white;
+	background-color: rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	height: 100%;
+	gap: var(--gap-small);
+	padding-left: 5em;
+	padding-right: 5em;
+	box-sizing: border-box;
+}
+
+.placement input {
+	width: 60%;
+}
+
+.placement #remove-placement-btn {
+	position: absolute;
+	bottom: 0.3em;
+	right: 0.3em;
+}
+
+.placement .grab-handle {
+	width: 5em;
+	height: 5em;
+	cursor: grab;
+	display: flex;
+	justify-self: flex-end;
+	justify-content: center;
+	align-items: center;
+	padding: var(--gap-small);
+	background-color: #aaaaaa;
+	border-radius: var(--gap-small);
+}
+
+
+.placement .grab-handle img {
+	pointer-events: none;
+}
+
+.placement .grab-handle:active {
+	cursor: grabbing;
+}
+
+.placement #pos-controls {
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr 3fr;
+}
+
+.placement #pos-controls input {
+	width: 80%;
+}
+
+.placement #pos-controls label {
+	text-align: right;
+	margin-right: 0.3em;
 }
 

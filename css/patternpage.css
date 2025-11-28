@@ -1,0 +1,11 @@
+
+.preview-page {
+
+	color: black;
+	background-color: white;
+	/*border: solid 1px black;*/
+	overflow: hidden;
+
+	position: relative;
+
+}

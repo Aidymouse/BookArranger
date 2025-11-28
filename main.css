@@ -37,7 +37,7 @@ body nav {
 
 nav details {
 	padding: var(--gap);
-	border-bottom: solid 1px black;
+	border-bottom: solid 1px var(--bg-lightest);
 }
 
 nav details[open] summary {
@@ -62,18 +62,10 @@ main {
 }
 
 #pattern-preview {
-
-}
-
-.preview-page {
-
-	color: black;
-	background-color: #f2f2f2;
-	border: solid 1px black;
-	overflow: hidden;
-
-	position: relative;
-
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--gap-small);
 }
 
 /* Placements */

@@ -58,14 +58,15 @@ export class PatternPage extends HTMLElement {
     render() {
         this.shadowRoot.innerHTML = `
 			<link rel="stylesheet" href="main.css">
+			<link rel="stylesheet" href="css/patternpage.css">
 			<div class="preview-page"
-				 style="width: ${this.pageWidth}px; height: ${this.pageHeight}px"
+				style="width: ${this.pageWidth}px; height: ${this.pageHeight}px"
 				onMousemove="this.getRootNode().host.handleMouseMove(event)"
 				onMouseup="this.getRootNode().host.handleMouseUp(event)"
 			>
 			</div>
 			<button onClick="this.getRootNode().host.addPlacement()">Add Placement</button>
-			<button onClick="this.getRootNode().host.removeThisPage()">Remove!</button>
+			<button onClick="this.getRootNode().host.removeThisPage()">Remove Page</button>
 		`
     }
 
@@ -99,23 +100,41 @@ export class PatternPage extends HTMLElement {
 			//const page_rect = this.shadowRoot.querySelector('.preview-page').getBoundingClientRect()
 			const page_width = this.pageWidth;
 			
-			const dist_left = placement_x;
-			const dist_top = placement_y;
+			const dist_left = Math.abs(placement_x);
+			const dist_top = Math.abs(placement_y);
 			
-			const dist_right = parseFloat(this.pageWidth) - (placement_x + placement_width)
-			const dist_bottom = parseFloat(this.pageHeight) - (placement_y + placement_height)
+			const dist_right = Math.abs(parseFloat(this.pageWidth) - (placement_x + placement_width))
+			const dist_bottom = Math.abs(parseFloat(this.pageHeight) - (placement_y + placement_height))
 
 			const SNAP_DISTANCE = 20;
 
-			if (Math.abs(dist_left) < SNAP_DISTANCE) {
+			// Snap to closest in-range value
+			const snap_hor = dist_left < SNAP_DISTANCE && dist_right < SNAP_DISTANCE 
+				? dist_left < dist_right ? 'left' : 'right'
+				: dist_left < SNAP_DISTANCE
+					? 'left'
+					: dist_right < SNAP_DISTANCE
+						? 'right'
+						: ''
+
+			if (snap_hor === 'left') {
 				placement.setAttribute('data-x', 0);
-			} else if (Math.abs(dist_right) < SNAP_DISTANCE) {
+			} else if (snap_hor === 'right') {
 				placement.setAttribute('data-x', parseFloat(this.pageWidth) - placement_width);
 			}
 
-			if (Math.abs(dist_top) < SNAP_DISTANCE) {
+			
+			const snap_vert = dist_top < SNAP_DISTANCE && dist_bottom < SNAP_DISTANCE 
+				? dist_top < dist_bottom ? 'top' : 'bottom'
+				: dist_top < SNAP_DISTANCE
+					? 'top'
+					: dist_bottom < SNAP_DISTANCE
+						? 'bottom'
+						: ''
+
+			if (snap_vert === 'top') {
 				placement.setAttribute('data-y', 0);
-			} else if (Math.abs(dist_bottom) < SNAP_DISTANCE) {
+			} else if (snap_vert === 'bottom') {
 				placement.setAttribute('data-y', parseFloat(this.pageHeight) - placement_height);
 			}
 		}
