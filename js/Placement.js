@@ -38,6 +38,15 @@ export class Placement extends HTMLElement {
         }
     }
 
+	handleMouseDown(e) {
+		this.parentNode.getRootNode().host.grabbedElem = this
+	}
+
+	handleMouseUp(e) {
+		// Parent div handles this
+		//this.parentNode.getRootNode().host.grabbedElem = this
+	}
+
     render() {
         const w = this.getAttribute('width')
         const h = this.getAttribute('height')
@@ -57,16 +66,21 @@ export class Placement extends HTMLElement {
 				</section>
 
 				<section>
+					<label for="placement-source-start">Start</label>
 					<input id="placement-source-start" type="number" value="1">
-					<input id="placement-source-skip" type="number" value="1">
-				</section>
-
-				<section>
-					<p>Grab Handle</p>
+					<label for="placement-source-skip">Skip</label>
+					<input id="placement-source-skip" type="number" value="0">
 				</section>
 
 				<section>
 					<button onClick="this.getRootNode().host.remove()">Remove Placement</button>
+				</section>
+
+				<section style="width: 5em; height: 5em; background-color: blue;"
+					class="grab-handle"
+					onMousedown="this.getRootNode().host.handleMouseDown(event)"
+				>
+					<p>Grab Handle</p>
 				</section>
 			</div>
 		`
@@ -74,5 +88,10 @@ export class Placement extends HTMLElement {
 
     connectedCallback() {
         this.render()
+
+		const grab_handle = this.shadowRoot.querySelector('.grab-handle')
+		//grab_handle.addEventListener('mousedown', this.handleMouseDown)
+		//grab_handle.addEventListener('mouseup', this.handleMouseUp)
+		// TODO: remove these 
     }
 }

@@ -10,6 +10,8 @@ export class PatternPage extends HTMLElement {
         // Defaults
         this.pageWidth = 100
         this.pageHeight = 100
+
+		this.grabbedElem = undefined
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -18,11 +20,9 @@ export class PatternPage extends HTMLElement {
         switch (attr) {
             case 'width':
                 this.pageWidth = newValue
-                // this.shadowRoot.querySelector(".preview-page").style.width = `${newValue}px`;
                 break
             case 'height':
                 this.pageHeight = newValue
-                //this.shadowRoot.querySelector(".preview-page").style.height = `${newValue}px`;
                 break
         }
     }
@@ -49,20 +49,51 @@ export class PatternPage extends HTMLElement {
     }
 
     removeThisPage() {
+		const page = this.shadowRoot.querySelector(".preview-page");
+		page.removeEventListener("mousemove", this.handleMouseMove);
+
         this.remove()
     }
 
     render() {
         this.shadowRoot.innerHTML = `
 			<link rel="stylesheet" href="main.css">
-			<div class="preview-page" style="width: ${this.pageWidth}px; height: ${this.pageHeight}px">
+			<div class="preview-page"
+				 style="width: ${this.pageWidth}px; height: ${this.pageHeight}px"
+				onMousemove="this.getRootNode().host.handleMouseMove(event)"
+				onMouseup="this.getRootNode().host.handleMouseUp(event)"
+			>
 			</div>
 			<button onClick="this.getRootNode().host.addPlacement()">Add Placement</button>
 			<button onClick="this.getRootNode().host.removeThisPage()">Remove!</button>
 		`
     }
 
+	handleMouseMove(e) {
+
+		if (this.grabbedElem === undefined) { return; }
+
+		const cur_x = this.grabbedElem.getAttribute('data-x')
+		const cur_y = this.grabbedElem.getAttribute('data-y')
+
+		console.log(e.movementX, e.movementY)
+		console.log(cur_x, e.movementX, cur_y, e.movementY)
+		
+
+		this.grabbedElem.setAttribute('data-x', parseFloat(cur_x) + e.movementX);
+		this.grabbedElem.setAttribute('data-y', parseFloat(cur_y) + e.movementY);
+
+
+	}
+
+	handleMouseUp(e) {
+		this.grabbedElem = undefined
+	}
+
     connectedCallback() {
         this.render()
+
+		//const page = this.shadowRoot.querySelector(".preview-page");
+		//page.addEventListener("mousemove", this.handleMouseMove);
     }
 }
