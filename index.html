@@ -66,12 +66,6 @@
 				
 			}
 
-			window.sourcePageWidthChanged = (newWidth) => {
-			}
-
-			window.sourcePageHeightChanged = (newHeight) => {
-			}
-
 
 			window.updatePlacementWidths = (newWidth) => {
 				const placements = getAllPlacements();
@@ -87,6 +81,14 @@
 				for (const placement of placements) {
 					placement.setAttribute('height', newHeight);
 				}
+			}
+
+			window.setPlacementSize = (pageSize) => {
+				window.updatePlacementWidths(measurements[pageSize].width)
+				window.updatePlacementHeights(measurements[pageSize].height)
+
+				document.querySelector('#source-page-width').value = measurements[pageSize].width
+				document.querySelector('#source-page-height').value = measurements[pageSize].height
 			}
 
 
@@ -193,7 +195,7 @@
 
 			<!-- Page Controls -->
 			<details open>
-				<summary>Page</summary>
+				<summary><strong>Page</strong></summary>
 
 				<div class="two-col-settings">
 					<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width" />
@@ -215,7 +217,7 @@
 
 			<!-- Source Controls -->
 			<details open>
-				<summary>Source Controls</summary>
+				<summary><strong>Source PDF Settings</strong></summary>
 
 				<div class="two-col-settings">
 					<label for="source-page-width">Source Page Width</label>
@@ -223,17 +225,28 @@
 
 					<label for="source-page-height">Source Page Height</label>
 					<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
+
+					<div style="grid-column: span 2;">
+						<button onClick="setPlacementSize('a5')">A5</button>
+						<button disabled>Letter</button>
+					</div>
 				</div>
+
 			</details>
 
 			<!-- Booklet Generator -->
 			<details>
-				<summary>Booklet Generator</summary>
+				<summary><strong>Booklet Generator</strong></summary>
 
 				<div class="two-col-settings">
-				</div>
+					<label for="bg-pages-per-section">Source Page Width</label>
+					<input type="number" value="400" id="bg-pages-per-section" >
 
-				<p>Under construction!</p>
+					<div style="grid-column: span 2;">
+						<button style="width: 100%">Generate Booklet</button>
+					</div>
+
+				</div>
 			</details>
 		</nav>
 

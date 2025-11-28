@@ -12,7 +12,7 @@ export const rearrange_pdf = async (source, arrangement_pattern) => {
     // Create the page
     // Iterate through the placements
     // If there is no source page, mark the placement as complete
-    // If all placements are complete, do not add the page (optional in future)
+    // TODO: If all placements are complete, do not add the page (optional in future)
 
     while (somePassed === true) {
         somePassed = false

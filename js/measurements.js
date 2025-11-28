@@ -64,4 +64,8 @@ export const measurements = {
         width: toPxConverters.point(595),
         height: toPxConverters.point(840),
     },
+    letter: {
+        width: toPxConverters.point(612.4),
+        height: toPxConverters.point(791),
+    },
 }
