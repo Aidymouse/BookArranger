@@ -23,7 +23,7 @@ export const rearrange_pdf = async (source, arrangement_pattern) => {
 
             for (const placement of arrange_page.tiles) {
                 const source_page =
-                    placement.start +
+                    (placement.start-1) + // Humans think page 1, computer sees page 0
                     placement.iteration +
                     placement.skip * placement.iteration
 

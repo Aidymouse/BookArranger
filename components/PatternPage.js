@@ -46,6 +46,8 @@ export class PatternPage extends HTMLElement {
 
         e.setAttribute('data-x', 0)
         e.setAttribute('data-y', 0)
+
+		return e
     }
 
     removeThisPage() {

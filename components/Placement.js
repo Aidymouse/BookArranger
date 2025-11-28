@@ -2,7 +2,7 @@
  * I don't think this *needs* to have a shadow root but i couldn't be bothered updating the code that updates placement widths
  * */
 export class Placement extends HTMLElement {
-    static observedAttributes = ['width', 'height', 'data-x', 'data-y']
+    static observedAttributes = ['width', 'height', 'data-x', 'data-y', 'data-start', 'data-skip']
 
     constructor() {
         super()
@@ -35,6 +35,18 @@ export class Placement extends HTMLElement {
                 this.shadowRoot.querySelector('#y').value = newValue
                 break
             }
+            case 'data-start': {
+                this.shadowRoot.querySelector('#placement-source-start').value = newValue
+				const skip = this.shadowRoot.querySelector('#placement-source-skip').valueAsNumber
+				this.shadowRoot.querySelector('#placement-pages').innerHTML = this.generatePagesString(parseFloat(newValue), skip);
+                break
+            }
+			case 'data-skip': {
+                this.shadowRoot.querySelector('#placement-source-skip').value = newValue
+				const start = this.shadowRoot.querySelector('#placement-source-start').valueAsNumber
+				this.shadowRoot.querySelector('#placement-pages').innerHTML = this.generatePagesString(start, parseFloat(newValue));
+                break
+			}
         }
     }
 
@@ -52,20 +64,11 @@ export class Placement extends HTMLElement {
 	}
 
 	updateStart(start) {
-		const skip = this.shadowRoot.querySelector('#placement-source-skip').valueAsNumber
-
-		if (isNaN(start) || isNaN(skip)) { return; }
-
-		this.shadowRoot.querySelector('#placement-pages').innerHTML = this.generatePagesString(start, skip);
+		this.setAttribute('data-start', start)
 	}
 
 	updateSkip(skip) {
-		const start = this.shadowRoot.querySelector('#placement-source-start').valueAsNumber
-
-		if (isNaN(start) || isNaN(skip)) { return; }
-
-		this.shadowRoot.querySelector('#placement-pages').innerHTML = this.generatePagesString(start, skip);
-
+		this.setAttribute('data-skip', skip)
 	}
 
     render() {

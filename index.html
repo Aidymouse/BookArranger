@@ -17,9 +17,6 @@
 			import { PDFDocument } from "./lib/pdf-lib.esm.min.js"
 			import { download } from './lib/download2.js'
 
-
-			//import { PDFDocument } from 'pdf-lib';
-
 			// Set default page to landscape a4
 			document.querySelector("#new-page-width").value = measurements.a4.height
 			document.querySelector("#new-page-height").value = measurements.a4.width
@@ -42,8 +39,6 @@
 
 					for (const placement of placements) {
 						allPlacements.push(placement);
-						//placement.shadowRoot.querySelector(".placement").style.width = "100px";
-						//console.log(placement.shadowRoot.querySelector(".placement"));
 					}
 					
 				}
@@ -63,6 +58,8 @@
 				pattern_page.setAttribute('height', pageHeight);
 
 				document.querySelector("#pattern-preview").appendChild(pattern_page);
+
+				return pattern_page;
 				
 			}
 
@@ -145,6 +142,7 @@
 			       PDFDocument.load(reader.result).then(pdf_res => {
 					 loaded_doc = pdf_res;
 					 console.log("Loaded");
+					document.querySelector("#rearrange-pdf-btn").disabled=false
 			       });
 			    
 			    
@@ -153,6 +151,53 @@
 			     console.log(event.target.files)
 			     reader.readAsDataURL(event.target.files[0]);
 			    
+			}
+
+			window.generate_booklet_pattern = () => {
+				const pages_per_section = document.querySelector('#bg-pages-per-section').valueAsNumber;
+				if (isNaN(pages_per_section)) { return; }
+
+				let booklet_pattern = {
+					pages: []
+				}
+
+				const page_width = document.querySelector('#new-page-width').valueAsNumber;
+				const page_height = document.querySelector('#new-page-height').valueAsNumber;
+				for (let i=0; i<(pages_per_section/2); i+=1) {
+					const new_page = {
+						tiles: [],
+						width: page_width,
+						height: page_height,
+					}
+
+					console.log(i%2)
+
+					new_page.tiles.push({
+						start: i+1,
+						skip: pages_per_section-1,
+						iteration: 0,
+						position: {
+							x: (i%2 === 0) ? page_width/2 : 0,
+							y: 0,
+						}
+					})
+
+					new_page.tiles.push({
+						start: pages_per_section-i,
+						skip: pages_per_section-1,
+						iteration: 0,
+						position: {
+							x: (i%2 === 0) ? 0 : page_width/2,
+							y: 0,
+						}
+					})
+
+					booklet_pattern.pages.push(new_page);
+				}
+
+				console.log("Generated Booklet Pattern", booklet_pattern)
+				
+				window.load_pattern(booklet_pattern);
 			}
 
 			window.generate = () => {
@@ -175,7 +220,17 @@
     			download(pattern_json, 'pattern.json', 'application/json')
 			}
 
-			window.load_pattern = () => {
+			window.load_pattern = (pattern) => {
+				for (const page of pattern.pages) {
+					const new_page = window.addPage()
+					for (const tile of page.tiles) {
+						const new_placement = new_page.addPlacement()
+						new_placement.setAttribute('data-x', tile.position.x)
+						new_placement.setAttribute('data-y', tile.position.y)
+						new_placement.setAttribute('data-start', tile.start)
+						new_placement.setAttribute('data-skip', tile.skip)
+					}
+				}
 			}
 
 		</script>
@@ -240,11 +295,11 @@
 					<summary><strong>Booklet Generator</strong></summary>
 
 					<div class="two-col-settings">
-						<label for="bg-pages-per-section">Source Page Width</label>
+						<label for="bg-pages-per-section">Pages per Section</label>
 						<input type="number" value="20" id="bg-pages-per-section" >
 
 						<div style="grid-column: span 2;">
-							<button style="width: 100%">Generate Booklet</button>
+							<button style="width: 100%" onClick="generate_booklet_pattern()">Generate Booklet Pattern</button>
 						</div>
 
 					</div>
@@ -252,9 +307,10 @@
 			</div>
 
 			<!-- PDF Source & Generate Controls  -->
-			<section class="padded-section" style=": flex-end;"> 
+			<section class="padded-section" style="border-bottom: none; border-top: solid 1px var(--bg-lightest)"> 
 				<input type="file" onChange="newFile(event)">
-				<button style="width: 100%; margin-top: var(--gap-small)"  onClick="generate()">Generate</button>
+				<!-- Gets enabled when a file is loaded -->
+				<button disabled id="rearrange-pdf-btn" style="width: 100%; height: 3em; margin-top: var(--gap-small)"  onClick="generate()">Rearrange PDF</button>
 			</section>
 		</nav>
 
