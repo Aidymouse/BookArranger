@@ -69,6 +69,7 @@ export class PatternPage extends HTMLElement {
 		`
     }
 
+	/** Move the dragged placement + handle snapping */
 	handleMouseMove(e) {
 
 		if (this.grabbedElem === undefined) { return; }
@@ -76,17 +77,51 @@ export class PatternPage extends HTMLElement {
 		const cur_x = this.grabbedElem.getAttribute('data-x')
 		const cur_y = this.grabbedElem.getAttribute('data-y')
 
-		console.log(e.movementX, e.movementY)
-		console.log(cur_x, e.movementX, cur_y, e.movementY)
-		
+		//console.log(e.movementX, e.movementY)
+		//console.log(cur_x, e.movementX, cur_y, e.movementY)
 
 		this.grabbedElem.setAttribute('data-x', parseFloat(cur_x) + e.movementX);
 		this.grabbedElem.setAttribute('data-y', parseFloat(cur_y) + e.movementY);
 
-
 	}
 
 	handleMouseUp(e) {
+		if (this.grabbedElem === undefined) { return; }
+		
+		if (!e.shiftKey) {
+			// Handle snapping
+			const placement = this.grabbedElem
+			const placement_x = parseFloat(placement.getAttribute('data-x'))
+			const placement_y = parseFloat(placement.getAttribute('data-y'))
+			const placement_width = parseFloat(placement.getAttribute('width'))
+			const placement_height = parseFloat(placement.getAttribute('height'))
+
+			//const page_rect = this.shadowRoot.querySelector('.preview-page').getBoundingClientRect()
+			const page_width = this.pageWidth;
+			
+			const dist_left = placement_x;
+			const dist_top = placement_y;
+			
+			const dist_right = parseFloat(this.pageWidth) - (placement_x + placement_width)
+			const dist_bottom = parseFloat(this.pageHeight) - (placement_y + placement_height)
+
+			const SNAP_DISTANCE = 20;
+
+			if (Math.abs(dist_left) < SNAP_DISTANCE) {
+				placement.setAttribute('data-x', 0);
+			} else if (Math.abs(dist_right) < SNAP_DISTANCE) {
+				placement.setAttribute('data-x', parseFloat(this.pageWidth) - placement_width);
+			}
+
+			if (Math.abs(dist_top) < SNAP_DISTANCE) {
+				placement.setAttribute('data-y', 0);
+			} else if (Math.abs(dist_bottom) < SNAP_DISTANCE) {
+				placement.setAttribute('data-y', parseFloat(this.pageHeight) - placement_height);
+			}
+		}
+
+
+		// Set grabbed to nothing
 		this.grabbedElem = undefined
 	}
 
