@@ -1,6 +1,11 @@
 html {
 	--bg: #333333;
+	--bg-light: #555555;
+	--bg-lightest: #888888;
 	--text-main: #f2f2f2;
+
+	--gap: 1em;
+	--gap-small: 0.3em;
 
 	background-color: var(--bg);
 	color: var(--text-main);
@@ -21,8 +26,40 @@ body {
 	height: 100%;
 	padding: 0;
 	margin: 0;
+
+	display: grid;
+	grid-template-columns: 20em 1fr;
 }
 
+body nav {
+	background-color: var(--bg-light);
+}
+
+nav details {
+	padding: var(--gap);
+	border-bottom: solid 1px black;
+}
+
+nav details[open] summary {
+	margin-bottom: var(--gap-small);
+}
+
+.two-col-settings {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	grid-row-gap: var(--gap-small);
+	
+}
+
+.two-col-settings input {
+	width: 100%;
+}
+
+
+main {
+	padding: var(--gap);	
+}
 
 #pattern-preview {
 

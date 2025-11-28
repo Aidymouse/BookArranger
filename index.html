@@ -15,6 +15,7 @@
 			import { rearrange_pdf } from './js/processPdf.js'
 
 			import { PDFDocument } from "./lib/pdf-lib.esm.min.js"
+			import { download } from './lib/download2.js'
 
 
 			//import { PDFDocument } from 'pdf-lib';
@@ -58,10 +59,11 @@
 				const pageHeight = document.querySelector("#new-page-height").value;
 
 				const pattern_page = document.createElement("pattern-page");
-pattern_page.setAttribute('width', pageWidth);
+				pattern_page.setAttribute('width', pageWidth);
 				pattern_page.setAttribute('height', pageHeight);
 
 				document.querySelector("#pattern-preview").appendChild(pattern_page);
+				
 			}
 
 			window.sourcePageWidthChanged = (newWidth) => {
@@ -99,9 +101,9 @@ pattern_page.setAttribute('width', pageWidth);
 
 				for (const page of patternPages) {
 					const new_page = {
-					tiles: [],
-					width: parseInt(page.getAttribute('width')),
-					height: parseInt(page.getAttribute('height')),
+						tiles: [],
+						width: parseInt(page.getAttribute('width')),
+						height: parseInt(page.getAttribute('height')),
 					}
 
 					const placements = page.shadowRoot.querySelectorAll("arranger-placement")
@@ -137,12 +139,10 @@ pattern_page.setAttribute('width', pageWidth);
 					console.log(load_res);
 			    
 			       if (!reader.result) return;
-
-
 			    
 			       PDFDocument.load(reader.result).then(pdf_res => {
-				 loaded_doc = pdf_res;
-				 console.log("Loaded");
+					 loaded_doc = pdf_res;
+					 console.log("Loaded");
 			       });
 			    
 			    
@@ -165,6 +165,17 @@ pattern_page.setAttribute('width', pageWidth);
 				rearrange_pdf(loaded_doc, pattern);
 			}
 
+			window.save_pattern = () => {
+
+				const pattern = extract_arrangement_pattern();
+				const pattern_json = JSON.stringify(pattern)
+
+    			download(pattern_json, 'pattern.json', 'application/json')
+			}
+
+			window.load_pattern = () => {
+			}
+
 		</script>
 
 	</head>
@@ -173,24 +184,61 @@ pattern_page.setAttribute('width', pageWidth);
 		<template id="preview-page">
 		</template>
 
-		<header></header>
-		<main>
-			
-			<!-- Page Controls -->
-			<section>
-				<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width">
-				<label for="new-page-height">New Page Height</label> <input type="number" value="" id="new-page-height">
-				<button onclick="addPage()">Add Page</button>
+		<nav>
+			<!-- Pattern Controls -->
+			<section style="padding: var(--gap); border-bottom: solid 1px black;"> 
+				<button onClick="save_pattern()">Save Pattern</button>
+				<button disabled>Load Pattern</button>
 			</section>
+
+			<!-- Page Controls -->
+			<details open>
+				<summary>Page</summary>
+
+				<div class="two-col-settings">
+					<label for="new-page-width">New Page Width</label> <input type="number" value="" id="new-page-width" />
+					<label for="new-page-height">New Page Height</label> <input type="number" value="" id="new-page-height" />
+
+					<div style="grid-column: span 2;">
+						<button disabled>A4</button>
+						<button disabled>Letter</button>
+					</div>
+
+					<div style="grid-column: span 2;">
+						<button style="width: 100%" onclick="addPage()">Add Page</button>
+					</div>
+
+
+				</div>
+
+			</details>
 
 			<!-- Source Controls -->
-			<section>
-				<label for="source-page-width">Source Page Width</label>
-				<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
+			<details open>
+				<summary>Source Controls</summary>
 
-				<label for="source-page-height">Source Page Height</label>
-				<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
-			</section>
+				<div class="two-col-settings">
+					<label for="source-page-width">Source Page Width</label>
+					<input type="number" value="400" id="source-page-width" onChange="updatePlacementWidths(event.target.value)">
+
+					<label for="source-page-height">Source Page Height</label>
+					<input type="number" value="400" id="source-page-height" onChange="updatePlacementHeights(event.target.value)">
+				</div>
+			</details>
+
+			<!-- Booklet Generator -->
+			<details>
+				<summary>Booklet Generator</summary>
+
+				<div class="two-col-settings">
+				</div>
+
+				<p>Under construction!</p>
+			</details>
+		</nav>
+
+		<main>
+			
 
 			<!-- Generator Controls -->
 			<section>
@@ -198,13 +246,11 @@ pattern_page.setAttribute('width', pageWidth);
 				<button onClick="generate()">Generate</button>
 			</section>
 
-			
-			
-
 			<!-- Where new pages get added -->
 			<section id="pattern-preview">
 			</section>
 
+			<!-- TODO: manual icon in bottom left -->
 
 		</main>
 
