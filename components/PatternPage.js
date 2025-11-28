@@ -59,14 +59,20 @@ export class PatternPage extends HTMLElement {
         this.shadowRoot.innerHTML = `
 			<link rel="stylesheet" href="main.css">
 			<link rel="stylesheet" href="css/patternpage.css">
-			<div class="preview-page"
-				style="width: ${this.pageWidth}px; height: ${this.pageHeight}px"
-				onMousemove="this.getRootNode().host.handleMouseMove(event)"
-				onMouseup="this.getRootNode().host.handleMouseUp(event)"
-			>
+			<div class="preview-page-container">
+
+				<section>
+					<button style="aspect-ratio: 4/3;" onClick="this.getRootNode().host.addPlacement()">Add Placement</button>
+					<button onClick="this.getRootNode().host.removeThisPage()">Remove Page</button>
+				</section>
+
+				<div class="preview-page"
+					style="width: ${this.pageWidth}px; height: ${this.pageHeight}px"
+					onMousemove="this.getRootNode().host.handleMouseMove(event)"
+					onMouseup="this.getRootNode().host.handleMouseUp(event)"
+				>
+				</div>
 			</div>
-			<button onClick="this.getRootNode().host.addPlacement()">Add Placement</button>
-			<button onClick="this.getRootNode().host.removeThisPage()">Remove Page</button>
 		`
     }
 

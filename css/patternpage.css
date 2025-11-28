@@ -1,4 +1,16 @@
 
+.preview-page-container {
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 0.3em;
+}
+
+.preview-page-container section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3em;
+}
+
 .preview-page {
 
 	color: black;
